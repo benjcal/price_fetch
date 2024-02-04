@@ -20,6 +20,19 @@ if System.get_env("PHX_SERVER") do
   config :price_fetch, PriceFetchWeb.Endpoint, server: true
 end
 
+# set guards and stop execution if the environment keys are not found
+if !System.get_env("PRICE_FETCH_ALPACA_URL") do
+  raise "PRICE_FETCH_ALPACA_URL enviroment variable not set"
+end
+
+if !System.get_env("PRICE_FETCH_ALPACA_KEY") do
+  raise "PRICE_FETCH_ALPACA_KEY enviroment variable not set"
+end
+
+if !System.get_env("PRICE_FETCH_ALPACA_SECRET") do
+  raise "PRICE_FETCH_ALPACA_SECRET enviroment variable not set"
+end
+
 if config_env() == :prod do
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you
