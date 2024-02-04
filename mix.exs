@@ -56,7 +56,8 @@ defmodule PriceFetch.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
       {:tesla, "~> 1.4"},
-      {:hackney, "~> 1.17"}
+      {:hackney, "~> 1.17"},
+      {:cachex, "~> 3.6"}
     ]
   end
 
