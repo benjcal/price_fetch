@@ -1,15 +1,15 @@
-<h1 class="mb-4 font-extrabold leading-none tracking-tigh text-gray-900 text-3xl dark:text-white">
+<h1 class=" mb-4 font-extrabold leading-none tracking-tigh text-slate-500 text-3xl dark:text-white">
   <%= @symbol %>
 </h1>
 
-<h1 class="mb-4  font-extrabold leading-none tracking-tight text-gray-900  text-6xl dark:text-white">
-  <%= @price %>
+<h1 class="mb-4  font-extrabold leading-none tracking-tight text-slate-800  text-6xl dark:text-white">
+  $<%= @price %>
 </h1>
 
 <button
   x-data="{}"
   @click="document.location = '/search'"
-  class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+  class="text-white bg-slate-600 hover:bg-slate-500 focus:ring-4 focus:outline-none focus:ring-slate-300 font-medium rounded-lg text-sm px-4 py-2 "
 >
   Back
 </button>
