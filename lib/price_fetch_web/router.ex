@@ -17,7 +17,11 @@ defmodule PriceFetchWeb.Router do
   scope "/", PriceFetchWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    get "/", SearchController, :redir
+
+    get "/search", SearchController, :index
+    get "/search/:symbol", SearchController, :show
+    post "/search", SearchController, :create
   end
 
   # Other scopes may use custom stacks.
