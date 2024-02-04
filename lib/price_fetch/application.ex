@@ -16,7 +16,8 @@ defmodule PriceFetch.Application do
       # Start a worker by calling: PriceFetch.Worker.start_link(arg)
       # {PriceFetch.Worker, arg},
       # Start to serve requests, typically the last entry
-      PriceFetchWeb.Endpoint
+      PriceFetchWeb.Endpoint,
+      {Cachex, name: :alpaca_cache}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
