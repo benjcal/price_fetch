@@ -7,7 +7,7 @@ defmodule Alpaca do
       Cache.exists?(symbol) ->
         IO.puts("Cache hit")
 
-        Cache.get!(symbol)
+        {:ok, Cache.get!(symbol)}
 
       true ->
         IO.puts("API call")
