@@ -10,12 +10,13 @@ defmodule PriceFetchWeb.SearchController do
   end
 
   def create(conn, %{"symbol" => symbol}) do
-    redirect(conn, to: ~p"/search/#{symbol}")
+    redirect(conn, to: "/search/#{symbol}")
   end
 
   def show(conn, %{"symbol" => symbol}) do
-    {:ok, data} = PriceFetch.get_symbol_snapshot(symbol)
-
-    render(conn, :show, data: data)
+    case PriceFetch.get_symbol_snapshot(symbol) do
+      {:ok, data} -> render(conn, :show, data: data)
+      {:error, _} -> render(conn, :error, symbol: symbol)
+    end
   end
 end

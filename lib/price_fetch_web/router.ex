@@ -20,8 +20,8 @@ defmodule PriceFetchWeb.Router do
     get "/", SearchController, :redir
 
     get "/search", SearchController, :index
-    get "/search/:symbol", SearchController, :show
     post "/search", SearchController, :create
+    get "/search/:symbol", SearchController, :show
   end
 
   # Other scopes may use custom stacks.

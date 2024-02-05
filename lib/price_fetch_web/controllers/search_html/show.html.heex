@@ -1,10 +1,6 @@
-<h1 class=" mb-4 font-extrabold tracking-tigh text-slate-500 text-3xl">
-  <%= @data.symbol %>
-</h1>
-
-<div class="mb-12">
-  <span class="font-extrabold tracking-tight text-slate-800 text-6xl">
-    <%= @data.price %>
+<div class="mb-2">
+  <span class="font-extrabold tracking-tigh text-slate-500 text-3xl">
+    <%= @data.symbol %>
   </span>
 
   <%= if @data.diff_sign == :positive do %>
@@ -26,10 +22,19 @@
   <% end %>
 </div>
 
-<button
-  x-data="{}"
-  @click="document.location = '/search'"
+<div class="mb-2">
+  <span class="font-extrabold tracking-tight text-slate-800 text-6xl">
+    <%= @data.price %>
+  </span>
+  <div class="mt-1 text-slate-600 text-sm">
+    At close: <%= @data.datetime %>
+  </div>
+</div>
+
+<hr class="mb-3" />
+<a
+  href="/search"
   class="text-white bg-slate-600 hover:bg-slate-500 focus:ring-4 focus:outline-none focus:ring-slate-300 font-medium rounded-lg text-sm px-4 py-2 "
 >
   Back
-</button>
+</a>

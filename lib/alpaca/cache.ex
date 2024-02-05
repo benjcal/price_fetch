@@ -3,8 +3,9 @@ defmodule Alpaca.Cache do
 
   def put!(key, val) do
     Cachex.put!(@cache_name, key, val)
-    # Cachex.expire!(@cache_name, key, :timer.seconds(900)) # set expiry to 15 min
-    Cachex.expire!(@cache_name, key, :timer.seconds(10))
+    # set expiry to 15 min
+    Cachex.expire!(@cache_name, key, :timer.seconds(900))
+    # Cachex.expire!(@cache_name, key, :timer.seconds(10))
   end
 
   def get!(key) do

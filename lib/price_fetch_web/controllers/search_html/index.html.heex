@@ -1,4 +1,4 @@
-<div x-data="{ symbol }">
+<form action="/search" method="POST">
   <label
     for="default-search"
     class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -24,20 +24,19 @@
       </svg>
     </div>
     <input
-      type="search"
-      x-model="symbol"
-      @keyup.enter="document.location = `/search/${symbol}`"
       class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-slate-500 focus:border-slate-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-500"
+      type="search"
       placeholder="Type stock symbol here (e.g., SPY, AMD)"
+      name="symbol"
       required
       autofocus
     />
     <button
-      @click="document.location = `/search/${symbol}`"
+      type="submit"
       class="text-white absolute end-2.5 bottom-2.5 bg-slate-600 hover:bg-slate-500 focus:ring-4 focus:outline-none focus:ring-slate-300 font-medium rounded-lg text-sm px-4 py-2 "
     >
       Search
     </button>
     <input name="_csrf_token" type="hidden" hidden value={get_csrf_token()} />
   </div>
-</div>
+</form>

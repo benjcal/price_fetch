@@ -64,6 +64,8 @@ defmodule Alpaca.Fetch do
       |> DateTime.from_iso8601()
 
     datetime
+    |> DateTime.shift_zone!("America/New_York")
+    |> Calendar.strftime("%B %-d %-I:%M%p")
   end
 
   defp get_symbol(body) do
