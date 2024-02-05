@@ -2,108 +2,35 @@ defmodule Alpaca.Fetch do
   use Tesla
 
   plug Tesla.Middleware.BaseUrl, get_api_url()
-  plug Tesla.Middleware.Headers, [{"APCA-API-KEY-ID", get_api_key()}]
-
-  plug Tesla.Middleware.Headers, [
-    {"APCA-API-SECRET-KEY", get_api_secret()}
-  ]
-
+  plug Tesla.Middleware.Headers, get_api_key_header()
+  plug Tesla.Middleware.Headers, get_api_secret_header()
   plug Tesla.Middleware.JSON
 
   def snapshot(symbol) do
     case get!("/stocks/#{symbol}/snapshot?feed=iex") do
       %{status: 200, body: body} ->
-        process_success(body)
+        if valid_body?(body) do
+          {:ok, body}
+        else
+          {:error, :invalid_response}
+        end
 
       %{status: status, body: body} ->
-        process_error(status, body)
+        dbg("Alpaca responded with status #{status} and body #{Jason.encode!(body)}")
+        {:error, status}
     end
   end
 
-  defp process_success(body) do
-    symbol = get_symbol(body)
-    price = get_price(body)
-    diff_number = get_diff_number(body)
-    diff_percent = get_diff_percent(body)
-    diff_sign = get_diff_sign(body)
-    datetime = get_datetime(body)
-
-    {:ok,
-     %{
-       symbol: symbol,
-       price: price,
-       diff_number: diff_number,
-       diff_percent: diff_percent,
-       diff_sign: diff_sign,
-       datetime: datetime
-     }}
+  def valid_body?(%{
+        "symbol" => _,
+        "prevDailyBar" => %{"c" => _},
+        "latestTrade" => %{"p" => _, "t" => _}
+      }) do
+    true
   end
 
-  defp get_price_number(body) do
-    body
-    |> Map.get("latestTrade")
-    |> Map.get("p")
-  end
-
-  defp get_prev_price_number(body) do
-    body
-    |> Map.get("prevDailyBar")
-    |> Map.get("c")
-  end
-
-  defp get_price(body) do
-    get_price_number(body)
-    |> Number.Currency.number_to_currency()
-  end
-
-  defp get_datetime(body) do
-    {:ok, datetime, _} =
-      body
-      |> Map.get("latestTrade")
-      |> Map.get("t")
-      |> DateTime.from_iso8601()
-
-    datetime
-    |> DateTime.shift_zone!("America/New_York")
-    |> Calendar.strftime("%B %-d %-I:%M%p")
-  end
-
-  defp get_symbol(body) do
-    body
-    |> Map.get("symbol")
-  end
-
-  defp get_diff_number(body) do
-    p = get_price_number(body)
-    pp = get_prev_price_number(body)
-
-    (p - pp)
-    |> Number.Delimit.number_to_delimited()
-  end
-
-  defp get_diff_percent(body) do
-    p = get_price_number(body)
-    pp = get_prev_price_number(body)
-
-    ((p - pp) / p * 100)
-    |> Number.Percentage.number_to_percentage(precision: 2)
-  end
-
-  defp get_diff_sign(body) do
-    p = get_price_number(body)
-    pp = get_prev_price_number(body)
-
-    diff = p - pp
-
-    cond do
-      diff == 0 -> :neutral
-      diff > 0 -> :positive
-      diff < 0 -> :negative
-    end
-  end
-
-  defp process_error(status, body) do
-    {:error, "Alpaca responded with status #{status} and body #{Jason.encode!(body)}"}
+  def valid_body?(_) do
+    false
   end
 
   defp get_api_url do
@@ -116,5 +43,71 @@ defmodule Alpaca.Fetch do
 
   defp get_api_secret do
     System.get_env("PRICE_FETCH_ALPACA_SECRET")
+  end
+
+  defp get_api_key_header do
+    [{"APCA-API-KEY-ID", get_api_key()}]
+  end
+
+  defp get_api_secret_header do
+    [
+      {"APCA-API-SECRET-KEY", get_api_secret()}
+    ]
+  end
+
+  def _sample_snapshot_body do
+    %{
+      "dailyBar" => %{
+        "c" => 494.29,
+        "h" => 496.04,
+        "l" => 489.34,
+        "n" => 11839,
+        "o" => 489.66,
+        "t" => "2024-02-02T05:00:00Z",
+        "v" => 1_262_797,
+        "vw" => 493.166808
+      },
+      "latestQuote" => %{
+        "ap" => 494.54,
+        "as" => 10,
+        "ax" => "V",
+        "bp" => 493.05,
+        "bs" => 10,
+        "bx" => "V",
+        "c" => ["R"],
+        "t" => "2024-02-05T13:04:34.700512256Z",
+        "z" => "B"
+      },
+      "latestTrade" => %{
+        "c" => [" "],
+        "i" => 58_520_343_100_232,
+        "p" => 494.29,
+        "s" => 100,
+        "t" => "2024-02-02T20:59:58.604342528Z",
+        "x" => "V",
+        "z" => "B"
+      },
+      "minuteBar" => %{
+        "c" => 494.29,
+        "h" => 494.63,
+        "l" => 494.29,
+        "n" => 230,
+        "o" => 494.63,
+        "t" => "2024-02-02T20:59:00Z",
+        "v" => 30360,
+        "vw" => 494.41776
+      },
+      "prevDailyBar" => %{
+        "c" => 489.22,
+        "h" => 489.22,
+        "l" => 483.8,
+        "n" => 12715,
+        "o" => 484.73,
+        "t" => "2024-02-01T05:00:00Z",
+        "v" => 1_636_158,
+        "vw" => 487.193658
+      },
+      "symbol" => "SPY"
+    }
   end
 end
