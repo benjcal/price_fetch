@@ -14,8 +14,8 @@ defmodule PriceFetchWeb.SearchController do
   end
 
   def show(conn, %{"symbol" => symbol}) do
-    {:ok, price} = Alpaca.get_symbol_price(symbol)
+    {:ok, data} = PriceFetch.get_symbol_snapshot(symbol)
 
-    render(conn, :show, symbol: symbol, price: Map.get(price, :price))
+    render(conn, :show, data: data)
   end
 end

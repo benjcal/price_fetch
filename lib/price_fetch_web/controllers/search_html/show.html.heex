@@ -1,10 +1,30 @@
-<h1 class=" mb-4 font-extrabold leading-none tracking-tigh text-slate-500 text-3xl dark:text-white">
-  <%= @symbol %>
+<h1 class=" mb-4 font-extrabold tracking-tigh text-slate-500 text-3xl">
+  <%= @data.symbol %>
 </h1>
 
-<h1 class="mb-12 font-extrabold leading-none tracking-tight text-slate-800  text-6xl dark:text-white">
-  $<%= @price %>
-</h1>
+<div class="mb-12">
+  <span class="font-extrabold tracking-tight text-slate-800 text-6xl">
+    <%= @data.price %>
+  </span>
+
+  <%= if @data.diff_sign == :positive do %>
+    <span class="text-green-700 font-bold text-2xl">
+      +<%= @data.diff_number %> (+<%= @data.diff_percent %>)
+    </span>
+  <% end %>
+
+  <%= if @data.diff_sign == :negative do %>
+    <span class="text-red-700 font-bold text-2xl">
+      <%= @data.diff_number %> (<%= @data.diff_percent %>)
+    </span>
+  <% end %>
+
+  <%= if @data.diff_sign == :neutral do %>
+    <span class="font-bold text-2xl">
+      <%= @data.diff_number %> (<%= @data.diff_percent %>)
+    </span>
+  <% end %>
+</div>
 
 <button
   x-data="{}"
