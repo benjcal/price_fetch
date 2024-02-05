@@ -1,40 +1,36 @@
-<div class="mb-2">
-  <span class="font-extrabold tracking-tigh text-slate-500 text-3xl">
-    <%= @data.symbol %>
-  </span>
+<div class="">
+  <div class="mb-2">
+    <span class="font-extrabold tracking-tigh text-slate-500 text-3xl">
+      <%= @data.symbol %>
+    </span>
 
-  <%= if @data.diff_sign == :positive do %>
-    <span class="text-green-700 font-bold text-2xl">
+    <span :if={@data.diff_sign == :positive} class="text-green-700 font-bold text-2xl">
       +<%= @data.diff_number %> (+<%= @data.diff_percent %>)
     </span>
-  <% end %>
 
-  <%= if @data.diff_sign == :negative do %>
-    <span class="text-red-700 font-bold text-2xl">
+    <span :if={@data.diff_sign == :negative} class="text-red-700 font-bold text-2xl">
       <%= @data.diff_number %> (<%= @data.diff_percent %>)
     </span>
-  <% end %>
 
-  <%= if @data.diff_sign == :neutral do %>
-    <span class="font-bold text-2xl">
+    <span :if={@data.diff_sign == :neutral} class="font-bold text-2xl">
       <%= @data.diff_number %> (<%= @data.diff_percent %>)
     </span>
-  <% end %>
-</div>
+  </div>
 
-<div class="mb-2">
-  <span class="font-extrabold tracking-tight text-slate-800 text-6xl">
-    <%= @data.price %>
-  </span>
-  <div class="mt-1 text-slate-600 text-sm">
-    At close: <%= @data.datetime %>
+  <div class="mb-2">
+    <span class="flex font-extrabold tracking-tight text-slate-800 text-6xl">
+      <%= @data.price %><span class="text-3xl">*</span>
+    </span>
+
+    <div class="mt-1 text-slate-600 text-sm">
+      At close: <%= @data.time %>
+    </div>
+
+    <div class="mt-4 text-slate-600 text-xs">
+      * Market data provided by IEX Exchange. Prices might differ slightly from other data sources.
+    </div>
   </div>
 </div>
-
-<hr class="mb-3" />
-<a
-  href="/search"
-  class="text-white bg-slate-600 hover:bg-slate-500 focus:ring-4 focus:outline-none focus:ring-slate-300 font-medium rounded-lg text-sm px-4 py-2 "
->
-  Back
-</a>
+<.back navigate="/search">
+  Search Again
+</.back>
