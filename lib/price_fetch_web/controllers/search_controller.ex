@@ -32,7 +32,10 @@ defmodule PriceFetchWeb.SearchController do
         |> render(:show)
 
       {:error, _} ->
-        render(conn, :error, symbol: symbol)
+        conn
+        |> assign(:symbol, symbol)
+        |> assign(:recent, Alpaca.Cache.keys())
+        |> render(:error)
     end
   end
 
